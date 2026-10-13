@@ -101,4 +101,43 @@ scheduleWhatsappFloatUpdate();
 window.addEventListener('scroll', scheduleWhatsappFloatUpdate, { passive: true });
 window.addEventListener('resize', scheduleWhatsappFloatUpdate);
 
-document.querySelector('[data-year]').textContent = new Date().getFullYear();
+const bookingForm = document.querySelector('[data-booking-form]');
+const bookingName = document.querySelector('#booking-name');
+const serviceInputs = document.querySelectorAll('input[name="service"]');
+const serviceButtons = document.querySelectorAll('[data-service]');
+const serviceNames = {
+  osteopatia: 'osteopatía',
+  kinesiologia: 'kinesiología',
+};
+
+const selectService = (service) => {
+  const input = [...serviceInputs].find((candidate) => candidate.value === service);
+  if (input) input.checked = true;
+};
+
+serviceButtons.forEach((button) => {
+  button.addEventListener('click', () => selectService(button.dataset.service));
+});
+
+if (bookingForm) {
+  const requestedService = typeof window.location?.search === 'string'
+    ? new URLSearchParams(window.location.search).get('service')
+    : null;
+  if (requestedService) selectService(requestedService);
+
+  bookingForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const selectedService = [...serviceInputs].find((input) => input.checked)?.value || 'osteopatia';
+    const serviceName = serviceNames[selectedService] || serviceNames.osteopatia;
+    const name = bookingName.value.trim().replace(/\s+/g, ' ');
+    const message = name
+      ? `Hola, me llamo ${name} y quisiera consultar disponibilidad para un turno de ${serviceName}. ¡Muchas gracias!`
+      : `Hola, quisiera consultar disponibilidad para un turno de ${serviceName}. ¡Muchas gracias!`;
+    const url = `https://wa.me/5492664921564?text=${encodeURIComponent(message)}`;
+
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
+}
+
+const year = document.querySelector('[data-year]');
+if (year) year.textContent = new Date().getFullYear();
