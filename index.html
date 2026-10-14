@@ -103,6 +103,8 @@
                 <li>Osteopatía C.O.</li>
                 <li>Profesora en Educación Física</li>
               </ul>
+              <!-- Activar este recurso sólo al confirmar años de trayectoria y actividad a la que refiere. -->
+              <div class="trajectory-slot" data-trajectory-slot hidden aria-hidden="true"></div>
               <a class="text-link" href="#reservas">Consultá disponibilidad</a>
             </div>
           </div>
@@ -137,23 +139,23 @@
 
       <section id="reservas" class="appointment section-space" aria-labelledby="appointment-title">
         <div class="page-shell appointment-layout">
-          <div class="appointment-copy">
+          <div class="appointment-copy appointment-intro">
             <div class="section-label"><p>Turnos</p></div>
-            <h2 id="appointment-title">Consultá disponibilidad para tu <em>próximo turno.</em></h2>
-            <p>Elegí el área de atención y, si querés, dejá tu nombre. Se abrirá WhatsApp con tu consulta preparada para enviar.</p>
-            <form class="booking-form" data-booking-form novalidate>
-              <fieldset>
-                <legend>Área de atención</legend>
-                <div class="booking-options">
-                  <label><input type="radio" name="service" value="osteopatia" checked /> <span>Osteopatía</span></label>
-                  <label><input type="radio" name="service" value="kinesiologia" /> <span>Kinesiología</span></label>
-                </div>
-              </fieldset>
-              <label class="booking-name" for="booking-name">Nombre <span>(opcional)</span></label>
-              <input id="booking-name" name="name" type="text" autocomplete="name" maxlength="80" />
-              <button class="button button-green" type="submit">Continuar por WhatsApp</button>
-            </form>
+            <h2 id="appointment-title">Solicitá un turno de forma <em>simple.</em></h2>
+            <p>Elegí el servicio y continuá tu consulta por WhatsApp.</p>
           </div>
+          <form class="booking-form" data-booking-form novalidate>
+            <fieldset>
+              <legend>Servicio seleccionado</legend>
+              <div class="booking-options">
+                <label><input type="radio" name="service" value="osteopatia" checked /> <span>Osteopatía</span></label>
+                <label><input type="radio" name="service" value="kinesiologia" /> <span>Kinesiología</span></label>
+              </div>
+            </fieldset>
+            <label class="booking-name" for="booking-name">Nombre <span>(opcional)</span></label>
+            <input id="booking-name" name="name" type="text" autocomplete="name" maxlength="80" />
+            <button class="button button-green" type="submit">Continuar por WhatsApp</button>
+          </form>
         </div>
       </section>
 
@@ -177,12 +179,12 @@
       <section id="contacto" class="contact section-space" aria-labelledby="contact-title">
         <div class="page-shell contact-layout">
           <div class="contact-copy">
-            <h2 id="contact-title">Atención profesional y <em>personalizada.</em></h2>
-            <p>Elegí el área de atención para consultar disponibilidad o usá el canal que te resulte más cómodo.</p>
-            <a class="button button-white" href="#reservas">Consultar disponibilidad</a>
+            <h2 id="contact-title">Encontrá un canal para resolver tus <em>dudas.</em></h2>
+            <p>Para consultas generales, elegí el medio de contacto que te resulte más cómodo.</p>
           </div>
           <address class="contact-details">
             <a href="tel:+5492664921564"><span>Teléfono</span><strong class="contact-phone-value"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21.5 16.9v3a1.9 1.9 0 0 1-2.1 1.9A18.8 18.8 0 0 1 2.1 4.6 1.9 1.9 0 0 1 4 2.5h3A1.9 1.9 0 0 1 8.9 4a12.3 12.3 0 0 0 .7 2.8 1.9 1.9 0 0 1-.4 2L8 10a15.2 15.2 0 0 0 6 6l1.2-1.2a1.9 1.9 0 0 1 2-.4 12.3 12.3 0 0 0 2.8.7 1.9 1.9 0 0 1 1.5 1.8Z"/></svg>2664 921564</strong></a>
+            <a href="https://wa.me/5492664921564?text=Hola%2C%20quisiera%20realizar%20una%20consulta." target="_blank" rel="noreferrer"><span>WhatsApp</span><strong>Escribir por WhatsApp</strong></a>
             <a href="https://www.instagram.com/gloria_seimandi_/" target="_blank" rel="noreferrer"><span>Instagram</span><strong>@gloria_seimandi_</strong></a>
             <div><span>Ubicación</span><strong>San Luis, Argentina</strong></div>
           </address>
