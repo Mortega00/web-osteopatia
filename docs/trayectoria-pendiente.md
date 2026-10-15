@@ -1,9 +1,10 @@
-# Trayectoria profesional pendiente de confirmación
+# Trayectoria profesional
 
-La sección “Sobre Gloria” ya incluye un recurso oculto (`[data-trajectory-slot]`) para publicar una síntesis de trayectoria cuando Gloria confirme:
+Gloria cuenta con 30 años de trayectoria profesional en Osteopatía y Kinesiología, según la información aportada para el sitio.
 
-- la cantidad exacta de años;
-- a qué actividad profesional corresponde ese recorrido;
-- el texto que desea comunicar.
+Queda pendiente de confirmar o recibir:
 
-Hasta entonces, no publicar “20 años de experiencia”, matrículas, diplomas ni certificaciones que no hayan sido verificadas.
+- la fecha exacta de inicio de la trayectoria profesional;
+- matrículas, diplomas y otros documentos profesionales que todavía no fueron recibidos.
+
+No publicar documentación o credenciales adicionales hasta contar con la verificación correspondiente.

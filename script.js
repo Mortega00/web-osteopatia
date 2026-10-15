@@ -8,8 +8,6 @@ const inertContent = [
   document.querySelector('main'),
   document.querySelector('.site-footer'),
 ].filter(Boolean);
-const whatsappFloat = document.querySelector('.whatsapp-float');
-const protectedFloatContent = document.querySelectorAll('main h1, main h2, main h3, main p, main .button, main .text-link, main summary, .site-footer a, .site-footer span');
 
 const setHeaderState = () => header.classList.toggle('is-stuck', window.scrollY > 4);
 setHeaderState();
@@ -19,6 +17,7 @@ const setMenuState = (isOpen, restoreFocus = false) => {
   toggle.setAttribute('aria-expanded', String(isOpen));
   toggleLabel.textContent = isOpen ? 'Cerrar menú' : 'Abrir menú';
   navigation.classList.toggle('is-open', isOpen);
+  document.body.classList?.toggle('menu-is-open', isOpen);
   document.body.style.overflow = isOpen ? 'hidden' : '';
   inertContent.forEach((element) => { element.inert = isOpen; });
 
@@ -72,64 +71,56 @@ window.addEventListener('resize', () => {
   if (window.innerWidth > 960) closeMenu();
 });
 
-const updateWhatsappFloat = () => {
-  if (!whatsappFloat) return;
+const whatsappFloat = document.querySelector('.whatsapp-float');
 
-  const positions = ['bottom-right', 'top-right', 'bottom-left', 'top-left'];
-  const overlapArea = (first, second) => {
-    const width = Math.max(0, Math.min(first.right, second.right) - Math.max(first.left, second.left));
-    const height = Math.max(0, Math.min(first.bottom, second.bottom) - Math.max(first.top, second.top));
-    return width * height;
-  };
-  let bestPosition = positions[0];
-  let smallestOverlap = Number.POSITIVE_INFINITY;
+if (whatsappFloat) {
+  const whatsappProtectedActions = [
+    ...document.querySelectorAll('main .button, main input, main summary'),
+  ];
+  let whatsappFrame;
 
-  positions.forEach((position) => {
-    whatsappFloat.dataset.floatPosition = position;
+  const updateWhatsAppVisibility = () => {
+    whatsappFrame = undefined;
     const floatBounds = whatsappFloat.getBoundingClientRect();
-    const totalOverlap = [...protectedFloatContent].reduce((total, element) => {
+    const blocksAnAction = whatsappProtectedActions.some((element) => {
       const bounds = element.getBoundingClientRect();
-      return total + overlapArea(floatBounds, bounds);
-    }, 0);
-    if (totalOverlap < smallestOverlap) {
-      smallestOverlap = totalOverlap;
-      bestPosition = position;
-    }
-  });
+      return bounds.width > 0
+        && bounds.height > 0
+        && bounds.right > floatBounds.left
+        && bounds.left < floatBounds.right
+        && bounds.bottom > floatBounds.top
+        && bounds.top < floatBounds.bottom;
+    });
 
-  whatsappFloat.dataset.floatPosition = bestPosition;
-  whatsappFloat.classList.remove('is-obscured');
-};
-
-let floatUpdateFrame;
-const scheduleWhatsappFloatUpdate = () => {
-  if (floatUpdateFrame) return;
-  const update = () => {
-    floatUpdateFrame = undefined;
-    updateWhatsappFloat();
+    whatsappFloat.classList.toggle('is-contextually-hidden', blocksAnAction);
   };
-  if (typeof window.requestAnimationFrame === 'function') floatUpdateFrame = window.requestAnimationFrame(update);
-  else update();
-};
 
-scheduleWhatsappFloatUpdate();
-window.addEventListener('scroll', scheduleWhatsappFloatUpdate, { passive: true });
-window.addEventListener('resize', scheduleWhatsappFloatUpdate);
+  const scheduleWhatsAppVisibility = () => {
+    if (whatsappFrame) return;
+    whatsappFrame = window.requestAnimationFrame?.(updateWhatsAppVisibility);
+    if (!whatsappFrame) updateWhatsAppVisibility();
+  };
 
-const revealTargets = document.querySelectorAll('.hero-copy, .hero-visual, .about-layout, .services-heading, .service-list, .appointment-layout, .faq-layout, .contact-layout, .detail-hero-layout, .detail-content .detail-layout, .detail-faq-layout, .service-cross-nav-layout, .detail-cta-layout');
-const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  window.addEventListener('scroll', scheduleWhatsAppVisibility, { passive: true });
+  window.addEventListener('resize', updateWhatsAppVisibility);
+  window.addEventListener('load', updateWhatsAppVisibility);
+  updateWhatsAppVisibility();
+}
 
-if (revealTargets.length && !reducedMotion && 'IntersectionObserver' in window) {
-  document.body.classList.add('has-reveal');
-  revealTargets.forEach((target) => target.classList.add('reveal'));
-  const revealObserver = new IntersectionObserver((entries, observer) => {
+const trajectory = document.querySelector('.about-trajectory');
+const reduceTrajectoryMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+if (trajectory && !reduceTrajectoryMotion && 'IntersectionObserver' in window) {
+  document.documentElement.classList.add('has-trajectory-motion');
+  const trajectoryObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       entry.target.classList.add('is-revealed');
       observer.unobserve(entry.target);
     });
-  }, { threshold: .12 });
-  revealTargets.forEach((target) => revealObserver.observe(target));
+  }, { threshold: .2 });
+
+  trajectoryObserver.observe(trajectory);
 }
 
 const bookingForm = document.querySelector('[data-booking-form]');
