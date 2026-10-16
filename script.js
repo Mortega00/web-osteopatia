@@ -72,30 +72,40 @@ window.addEventListener('resize', () => {
 });
 
 const whatsappFloat = document.querySelector('.whatsapp-float');
+const whatsappAssist = document.querySelector('[data-whatsapp-assist]');
+const whatsappAssistClose = document.querySelector('[data-whatsapp-assist-close]');
+let scheduleWhatsAppVisibility = () => {};
 
 if (whatsappFloat) {
   const whatsappProtectedActions = [
     ...document.querySelectorAll('main .button, main input, main summary'),
   ];
+  const whatsappAssistProtectedContent = [
+    ...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main .button, main input, main textarea, main summary'),
+  ];
   let whatsappFrame;
+
+  const overlapsProtectedContent = (bounds, protectedContent = whatsappProtectedActions) => protectedContent.some((element) => {
+    const actionBounds = element.getBoundingClientRect();
+    return actionBounds.width > 0
+      && actionBounds.height > 0
+      && actionBounds.right > bounds.left
+      && actionBounds.left < bounds.right
+      && actionBounds.bottom > bounds.top
+      && actionBounds.top < bounds.bottom;
+  });
 
   const updateWhatsAppVisibility = () => {
     whatsappFrame = undefined;
     const floatBounds = whatsappFloat.getBoundingClientRect();
-    const blocksAnAction = whatsappProtectedActions.some((element) => {
-      const bounds = element.getBoundingClientRect();
-      return bounds.width > 0
-        && bounds.height > 0
-        && bounds.right > floatBounds.left
-        && bounds.left < floatBounds.right
-        && bounds.bottom > floatBounds.top
-        && bounds.top < floatBounds.bottom;
-    });
+    whatsappFloat.classList.toggle('is-contextually-hidden', overlapsProtectedContent(floatBounds));
 
-    whatsappFloat.classList.toggle('is-contextually-hidden', blocksAnAction);
+    if (whatsappAssist && !whatsappAssist.classList.contains('is-dismissed')) {
+      whatsappAssist.classList.toggle('is-contextually-hidden', overlapsProtectedContent(whatsappAssist.getBoundingClientRect(), whatsappAssistProtectedContent));
+    }
   };
 
-  const scheduleWhatsAppVisibility = () => {
+  scheduleWhatsAppVisibility = () => {
     if (whatsappFrame) return;
     whatsappFrame = window.requestAnimationFrame?.(updateWhatsAppVisibility);
     if (!whatsappFrame) updateWhatsAppVisibility();
@@ -105,6 +115,29 @@ if (whatsappFloat) {
   window.addEventListener('resize', updateWhatsAppVisibility);
   window.addEventListener('load', updateWhatsAppVisibility);
   updateWhatsAppVisibility();
+}
+
+if (whatsappAssist) {
+  const dismissWhatsAppAssist = () => {
+    whatsappAssist.classList.add('is-dismissed');
+    whatsappAssist.setAttribute('aria-hidden', 'true');
+  };
+  const dismissAssistAfterScroll = () => {
+    if (window.scrollY > 180) dismissWhatsAppAssist();
+  };
+
+  whatsappAssistClose?.addEventListener('click', dismissWhatsAppAssist);
+  window.addEventListener('scroll', dismissAssistAfterScroll, { passive: true });
+  const introduction = document.querySelector('#inicio, main > article > section, main > section');
+  if (introduction && 'IntersectionObserver' in window) {
+    const introductionObserver = new IntersectionObserver((entries, observer) => {
+      if (entries.some((entry) => entry.isIntersecting)) return;
+      dismissWhatsAppAssist();
+      observer.disconnect();
+    }, { threshold: .08 });
+    introductionObserver.observe(introduction);
+  }
+  dismissAssistAfterScroll();
 }
 
 const trajectory = document.querySelector('.about-trajectory');
@@ -124,37 +157,142 @@ if (trajectory && !reduceTrajectoryMotion && 'IntersectionObserver' in window) {
 }
 
 const bookingForm = document.querySelector('[data-booking-form]');
-const bookingName = document.querySelector('#booking-name');
-const serviceInputs = document.querySelectorAll('input[name="service"]');
 const serviceButtons = document.querySelectorAll('[data-service]');
-const serviceNames = {
-  osteopatia: 'osteopatía',
-  kinesiologia: 'kinesiología',
-};
-
-const selectService = (service) => {
-  const input = [...serviceInputs].find((candidate) => candidate.value === service);
-  if (input) input.checked = true;
-};
-
-serviceButtons.forEach((button) => {
-  button.addEventListener('click', () => selectService(button.dataset.service));
-});
 
 if (bookingForm) {
+  const bookingName = bookingForm.querySelector('#booking-name');
+  const bookingComment = bookingForm.querySelector('#booking-comment');
+  const serviceInputs = [...bookingForm.querySelectorAll('input[name="service"]')];
+  const nameError = bookingForm.querySelector('#booking-name-error');
+  const serviceError = bookingForm.querySelector('#booking-service-error');
+  const nextButton = bookingForm.querySelector('[data-booking-next]');
+  const backButton = bookingForm.querySelector('[data-booking-back]');
+  const submitButton = bookingForm.querySelector('[data-booking-submit]');
+  const progress = bookingForm.querySelector('[data-booking-progress]');
+  const steps = [...bookingForm.querySelectorAll('[data-booking-step]')];
+  const mobileQuery = window.matchMedia('(max-width: 680px)');
+  let currentStep = 1;
+
+  const normalizeText = (value) => value.trim().replace(/\s+/g, ' ');
+  const clearNameError = () => {
+    bookingName.setCustomValidity('');
+    bookingName.removeAttribute('aria-invalid');
+    nameError.hidden = true;
+    nameError.textContent = '';
+  };
+  const clearServiceError = () => {
+    serviceInputs.forEach((input) => input.removeAttribute('aria-invalid'));
+    serviceError.hidden = true;
+    serviceError.textContent = '';
+  };
+  const selectService = (service) => {
+    const input = serviceInputs.find((candidate) => candidate.value === service);
+    if (!input) return false;
+    input.checked = true;
+    clearServiceError();
+    return true;
+  };
+  const selectedService = () => serviceInputs.find((input) => input.checked)?.value || null;
+  const validateName = () => {
+    const name = normalizeText(bookingName.value);
+    bookingName.value = name;
+    if (name) {
+      clearNameError();
+      return true;
+    }
+    bookingName.setCustomValidity('Ingresá tu nombre completo para continuar.');
+    bookingName.setAttribute('aria-invalid', 'true');
+    nameError.textContent = 'Ingresá tu nombre para continuar.';
+    nameError.hidden = false;
+    return false;
+  };
+  const validateService = () => {
+    if (selectedService()) {
+      clearServiceError();
+      return true;
+    }
+    serviceInputs.forEach((input) => input.setAttribute('aria-invalid', 'true'));
+    serviceError.textContent = 'Elegí una opción para continuar.';
+    serviceError.hidden = false;
+    return false;
+  };
+  const updateSteps = (focusTarget) => {
+    const isMobile = mobileQuery.matches;
+    bookingForm.dataset.currentStep = String(currentStep);
+    steps.forEach((step) => {
+      const isCurrent = Number(step.dataset.bookingStep) === currentStep;
+      step.hidden = isMobile && !isCurrent;
+      step.setAttribute('aria-hidden', String(isMobile && !isCurrent));
+    });
+    progress.hidden = !isMobile;
+    progress.textContent = `Paso ${currentStep} de 2`;
+    scheduleWhatsAppVisibility();
+    if (!focusTarget || !isMobile) return;
+    window.requestAnimationFrame(() => {
+      if (focusTarget === 'name') bookingName.focus();
+      if (focusTarget === 'service') (serviceInputs.find((input) => input.checked) || serviceInputs[0]).focus();
+    });
+  };
+  const goToStep = (step, focusTarget) => {
+    currentStep = step;
+    updateSteps(focusTarget);
+  };
+  const buildMessage = (name, service, comment) => {
+    const normalizedComment = normalizeText(comment).replace(/[.?!…]+$/u, '');
+    const closing = '¿Podemos coordinar un turno?';
+    if (service === 'orientacion') {
+      const context = normalizedComment ? ` ${normalizedComment} y no sé qué tipo de atención necesito.` : ' No sé qué tipo de atención necesito.';
+      return `Hola Gloria, mi nombre es ${name}. Quisiera solicitar una consulta con vos.${context} ${closing}`;
+    }
+    const serviceLabel = service === 'osteopatia' ? 'Osteopatía' : 'Kinesiología';
+    const context = normalizedComment ? ` Te cuento brevemente: ${normalizedComment}.` : '';
+    return `Hola Gloria, mi nombre es ${name}. Quisiera solicitar una consulta con vos por ${serviceLabel}.${context} ${closing}`;
+  };
+
+  bookingForm.dataset.bookingEnhanced = 'true';
+  nextButton.hidden = false;
+  backButton.hidden = false;
+  submitButton.hidden = false;
+
   const requestedService = typeof window.location?.search === 'string'
     ? new URLSearchParams(window.location.search).get('service')
     : null;
   if (requestedService) selectService(requestedService);
+  updateSteps();
+
+  serviceButtons.forEach((button) => {
+    button.addEventListener('click', () => selectService(button.dataset.service));
+  });
+
+  bookingName.addEventListener('input', () => {
+    if (normalizeText(bookingName.value)) clearNameError();
+  });
+  bookingName.addEventListener('blur', validateName);
+  serviceInputs.forEach((input) => input.addEventListener('change', clearServiceError));
+  nextButton.addEventListener('click', () => {
+    if (!validateName()) {
+      bookingName.focus();
+      return;
+    }
+    goToStep(2, 'service');
+  });
+  backButton.addEventListener('click', () => goToStep(1, 'name'));
+  mobileQuery.addEventListener('change', () => updateSteps());
 
   bookingForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    const selectedService = [...serviceInputs].find((input) => input.checked)?.value || 'osteopatia';
-    const serviceName = serviceNames[selectedService] || serviceNames.osteopatia;
-    const name = bookingName.value.trim().replace(/\s+/g, ' ');
-    const message = name
-      ? `Hola, me llamo ${name} y quisiera consultar disponibilidad para un turno de ${serviceName}. ¡Muchas gracias!`
-      : `Hola, quisiera consultar disponibilidad para un turno de ${serviceName}. ¡Muchas gracias!`;
+    const isNameValid = validateName();
+    const service = selectedService();
+    const isServiceValid = validateService();
+    if (!isNameValid) {
+      goToStep(1, 'name');
+      return;
+    }
+    if (!isServiceValid) {
+      goToStep(2, 'service');
+      return;
+    }
+    const message = buildMessage(bookingName.value, service, bookingComment.value);
     const url = `https://wa.me/5492664921564?text=${encodeURIComponent(message)}`;
 
     window.open(url, '_blank', 'noopener,noreferrer');

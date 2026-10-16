@@ -97,12 +97,12 @@
           <div class="hero-copy reveal">
             <p class="eyebrow"><span></span> Atención profesional y cercana</p>
             <h1 id="hero-title">Tu bienestar,<br /><em>en movimiento.</em></h1>
-            <p class="hero-intro">Osteopatía y Kinesiología en San Luis, con una atención cercana y profesional para quienes buscan cuidar su salud y mejorar su movilidad.</p>
+            <p class="hero-intro">¿Hay algo que te molesta o te cuesta hacer como antes? Estamos para escucharte. Conocé la atención de Gloria Seimandi en Osteopatía y Kinesiología.</p>
             <div class="hero-actions">
-              <a class="button" href="#reservas">Reservar turno</a>
+              <a class="button" href="#reservas">Solicitar consulta</a>
               <a class="text-link" href="#sobre-gloria">Conocé el espacio</a>
             </div>
-            <p class="hero-note"><span class="note-dot"></span> Elegí un área de atención y consultá disponibilidad por WhatsApp</p>
+            <p class="hero-note"><span class="note-dot"></span> Elegí un área de atención o pedí orientación por WhatsApp</p>
           </div>
           <div class="hero-visual reveal">
             <div class="image-shape">
@@ -125,20 +125,16 @@
           </div>
           <div class="about-content">
             <div class="about-heading">
-              <h2 id="about-title">Conocé a Gloria Seimandi</h2>
+              <h2 id="about-title">Gloria Seimandi</h2>
             </div>
             <div class="about-details">
-              <p class="lead">Cada persona llega con una situación distinta. Por eso, lo primero es escuchar.</p>
-              <div class="about-copy">
-                <p>Gloria Seimandi desarrolla su práctica desde la osteopatía y la kinesiología, con una formación que integra el estudio del cuerpo y la actividad física.</p>
-                <p>La información que compartís ayuda a comprender el motivo de tu consulta.</p>
-              </div>
+              <p class="lead">Una molestia que no se va. Algo que antes hacías sin pensar y ahora te cuesta. Detrás de cada consulta hay una historia que merece ser escuchada.</p>
               <ul class="credentials" aria-label="Formación profesional de Gloria">
                 <li>Licenciada en Kinesiología y Fisioterapia</li>
                 <li>Osteopatía C.O.</li>
                 <li>Profesora en Educación Física</li>
               </ul>
-              <div class="about-availability"><a class="button button-small" href="#reservas">Solicitar turno</a></div>
+              <div class="about-availability"><a class="button button-small" href="#reservas">Queremos escucharte</a></div>
             </div>
           </div>
         </div>
@@ -149,21 +145,21 @@
           <div class="services-heading">
             <div class="section-label section-label-light"><p>Áreas de atención</p></div>
             <h2 id="services-title">Osteopatía y <em>Kinesiología.</em></h2>
-            <p>Conocé cada área y elegí la que mejor se relaciona con tu motivo de consulta.</p>
+            <p>Conocé nuestras especialidades. Y si no sabes cuál elegir, escribinos. Te ayudamos a dar el primer paso.</p>
           </div>
           <div class="service-list">
             <article class="service-item">
-              <div class="service-copy"><h3>Osteopatía</h3><p>Una mirada sobre la relación entre la estructura corporal, la función y el motivo de consulta.</p></div>
+              <div class="service-copy"><h3>Osteopatía</h3><p>Molestias de espalda, cuello o tensión al moverte. Conocé en qué consiste la Osteopatía y cuándo puede ser útil consultar.</p></div>
               <div class="service-actions">
                 <a class="service-link" href="osteopatia/">Conocer más</a>
-                <a class="button button-service" href="#reservas" data-service="osteopatia">Reservar Osteopatía</a>
+                <a class="button button-service" href="#reservas" data-service="osteopatia">Solicitar consulta de Osteopatía</a>
               </div>
             </article>
             <article class="service-item">
-              <div class="service-copy"><h3>Kinesiología</h3><p>Atención orientada al movimiento y la funcionalidad, de acuerdo con la evaluación profesional.</p></div>
+              <div class="service-copy"><h3>Kinesiología</h3><p>Lesiones, molestias o movimientos que se volvieron difíciles. Conocé cómo puede ayudarte una consulta en Kinesiología.</p></div>
               <div class="service-actions">
                 <a class="service-link" href="kinesiologia/">Conocer más</a>
-                <a class="button button-service" href="#reservas" data-service="kinesiologia">Reservar Kinesiología</a>
+                <a class="button button-service" href="#reservas" data-service="kinesiologia">Solicitar consulta de Kinesiología</a>
               </div>
             </article>
           </div>
@@ -173,21 +169,40 @@
       <section id="reservas" class="appointment section-space" aria-labelledby="appointment-title">
         <div class="page-shell appointment-layout">
           <div class="appointment-copy appointment-intro">
-            <div class="section-label"><p>Turnos</p></div>
-            <h2 id="appointment-title">Solicitá un turno de forma <em>simple.</em></h2>
-            <p>Elegí el servicio y continuá tu consulta por WhatsApp.</p>
+            <div class="section-label"><p>Consulta</p></div>
+            <h2 id="appointment-title">Solicitá tu turno de forma <em>simple.</em></h2>
+            <p>Contanos qué necesitas y te ayudamos a coordinar una consulta.</p>
           </div>
           <form class="booking-form" data-booking-form novalidate>
-            <fieldset>
-              <legend>Servicio seleccionado</legend>
-              <div class="booking-options">
-                <label><input type="radio" name="service" value="osteopatia" checked /> <span>Osteopatía</span></label>
-                <label><input type="radio" name="service" value="kinesiologia" /> <span>Kinesiología</span></label>
+            <p class="booking-progress" data-booking-progress aria-live="polite" hidden>Paso 1 de 2</p>
+            <div class="booking-step" data-booking-step="1">
+              <p class="booking-step-title">Queremos conocerte</p>
+              <label class="booking-name" for="booking-name">Nombre completo <span aria-hidden="true">*</span></label>
+              <input class="booking-name-input" id="booking-name" name="name" type="text" autocomplete="name" placeholder="Tu nombre y apellido" aria-describedby="booking-name-error" required />
+              <p class="booking-error" id="booking-name-error" aria-live="polite" hidden></p>
+              <button class="button button-green booking-continue" type="button" data-booking-next hidden>Continuar</button>
+            </div>
+            <div class="booking-step" data-booking-step="2">
+              <fieldset aria-describedby="booking-service-error">
+                <legend>¿En qué podemos ayudarte?</legend>
+                <div class="booking-options">
+                  <label><input type="radio" name="service" value="osteopatia" required /> <span>Osteopatía</span></label>
+                  <label><input type="radio" name="service" value="kinesiologia" /> <span>Kinesiología</span></label>
+                  <label><input type="radio" name="service" value="orientacion" /> <span>No sé qué atención necesito</span></label>
+                </div>
+              </fieldset>
+              <p class="booking-error" id="booking-service-error" aria-live="polite" hidden></p>
+              <div class="booking-comment">
+                <label for="booking-comment">¿Querés contarnos algo más? <span>(opcional)</span></label>
+                <textarea id="booking-comment" name="comment" rows="3" maxlength="360" placeholder="Por ejemplo: tengo una molestia en la rodilla." aria-describedby="booking-comment-help"></textarea>
+                <p class="booking-help" id="booking-comment-help">Si querés, podés contarnos brevemente el motivo de tu consulta.<span class="visually-hidden"> Máximo 360 caracteres.</span></p>
               </div>
-            </fieldset>
-            <label class="booking-name" for="booking-name">Nombre <span>(opcional)</span></label>
-            <input id="booking-name" name="name" type="text" autocomplete="name" maxlength="80" />
-            <button class="button button-green" type="submit">Enviar consulta por WhatsApp</button>
+              <div class="booking-actions">
+                <button class="booking-back" type="button" data-booking-back hidden>Atrás</button>
+                <button class="button button-green" type="submit" data-booking-submit hidden>Continuar con WhatsApp</button>
+              </div>
+            </div>
+            <noscript><p class="booking-no-script">Para solicitar una consulta, <a href="https://wa.me/5492664921564?text=Hola%2C%20quisiera%20realizar%20una%20consulta." target="_blank" rel="noreferrer">escribinos por WhatsApp</a>.</p></noscript>
           </form>
         </div>
       </section>
@@ -197,14 +212,14 @@
           <div class="faq-intro">
             <div class="section-label"><p>Preguntas frecuentes</p></div>
             <h2 id="faq-title">Preguntas <em>frecuentes.</em></h2>
-            <p>Encontrá respuestas rápidas sobre las áreas actuales y la forma de consultar disponibilidad.</p>
+            <p>Encontrá respuestas rápidas sobre la atención y cómo solicitar una consulta.</p>
             <a class="text-link" href="#reservas">Escribinos por WhatsApp</a>
           </div>
           <div class="faq-list">
-            <details><summary>¿Cómo solicito un turno?<span aria-hidden="true"></span></summary><p>Elegí Osteopatía o Kinesiología en la sección de turnos. Luego se abrirá WhatsApp con tu consulta lista para enviar.</p></details>
-            <details><summary>¿Qué áreas de atención están disponibles?<span aria-hidden="true"></span></summary><p>Actualmente podés consultar por Osteopatía o Kinesiología. Encontrarás una explicación breve de cada propuesta en la sección de atención.</p></details>
-            <details><summary>¿Dónde se realiza la atención?<span aria-hidden="true"></span></summary><p>San Luis, Argentina.</p></details>
-            <details><summary>¿Qué información puedo enviar antes de mi consulta?<span aria-hidden="true"></span></summary><p>Podés contar brevemente el motivo de tu consulta. Si tenés estudios o antecedentes relevantes, compartí esa información al coordinar para confirmar qué conviene llevar.</p></details>
+            <details><summary>¿Y si no sé qué atención necesito?<span aria-hidden="true"></span></summary><p>No pasa nada. Elegí esa opción al solicitar tu consulta y contanos brevemente qué te preocupa.</p></details>
+            <details><summary>¿Cómo puedo pedir un turno?<span aria-hidden="true"></span></summary><p>Completá tu nombre, elegí una opción y continuá por WhatsApp. Te ayudamos a coordinarlo.</p></details>
+            <details><summary>¿Dónde atienden?<span aria-hidden="true"></span></summary><p>En San Luis, Argentina. Al coordinar tu turno te compartimos la información del lugar.</p></details>
+            <details><summary>¿Cuántas sesiones voy a necesitar?<span aria-hidden="true"></span></summary><p>Depende de cada situación. No se puede definir una cantidad sin una evaluación profesional.</p></details>
           </div>
         </div>
       </section>
@@ -213,7 +228,7 @@
         <div class="page-shell contact-layout">
           <div class="contact-copy">
             <h2 id="contact-title">¿Tenés alguna <em>consulta?</em></h2>
-            <p>Escribinos por WhatsApp para consultar por la atención o coordinar un turno.</p>
+            <p>Escribinos por WhatsApp para hacer una consulta o solicitar un turno.</p>
           </div>
           <address class="contact-details">
             <a href="https://wa.me/5492664921564?text=Hola%2C%20quisiera%20realizar%20una%20consulta." target="_blank" rel="noreferrer"><span>WhatsApp</span><strong>Escribir por WhatsApp</strong></a>
@@ -241,10 +256,19 @@
       <div class="page-shell footer-bottom"><span>© <span data-year></span> Gloria Seimandi. Todos los derechos reservados.</span><span class="nodo-credit">Un proyecto de <a href="https://nododigital.com.ar/" target="_blank" rel="noreferrer" aria-label="NODO Digital"><img class="nodo-credit-mark" src="assets/nodo-transparente-96.png" srcset="assets/nodo-transparente-64.png 64w, assets/nodo-transparente-96.png 96w" sizes="38px" width="96" height="96" alt="" /><span>NODO</span></a></span></div>
     </footer>
 
-    <a class="whatsapp-float" href="https://wa.me/5492664921564?text=Hola%20Gloria%2C%20%C2%BFc%C3%B3mo%20est%C3%A1s%3F%20Quer%C3%ADa%20consultarte%20por%20un%20turno." target="_blank" rel="noreferrer" aria-label="Escribir a Gloria por WhatsApp">
-      <svg aria-hidden="true" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.4-138c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.7 23.5 9.1 31.5 11.7 13.2 4.2 25.2 3.6 34.7 2.2 10.6-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" /></svg>
-      <span>WhatsApp</span>
-    </a>
+    <div class="whatsapp-contact" data-whatsapp-contact>
+      <aside class="whatsapp-assist" data-whatsapp-assist aria-label="Mensaje de ayuda para contactar por WhatsApp">
+        <button class="whatsapp-assist-close" type="button" data-whatsapp-assist-close aria-label="Cerrar mensaje de ayuda"><span aria-hidden="true">×</span></button>
+        <a href="https://wa.me/5492664921564?text=Hola%2C%20tengo%20una%20molestia%20y%20quisiera%20hacer%20una%20consulta." target="_blank" rel="noreferrer" aria-label="Escribir por WhatsApp con una consulta general">
+          <span>¿Tenes alguna molestia o no sabes qué atención necesitas?</span>
+          <strong>Contanos, estamos para ayudarte.</strong>
+        </a>
+      </aside>
+      <a class="whatsapp-float" href="https://wa.me/5492664921564?text=Hola%20Gloria%2C%20%C2%BFc%C3%B3mo%20est%C3%A1s%3F%20Quer%C3%ADa%20consultarte%20por%20un%20turno." target="_blank" rel="noreferrer" aria-label="Escribir a Gloria por WhatsApp">
+        <svg aria-hidden="true" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.4-138c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8s-14.3 18-17.6 21.8c-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3s19.9 53.7 22.6 57.4c2.8 3.7 39.1 59.7 94.8 83.8 13.2 5.7 23.5 9.1 31.5 11.7 13.2 4.2 25.2 3.6 34.7 2.2 10.6-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z" /></svg>
+        <span>WhatsApp</span>
+      </a>
+    </div>
 
     <script src="script.js"></script>
   </body>
