@@ -78,10 +78,10 @@ let scheduleWhatsAppVisibility = () => {};
 
 if (whatsappFloat) {
   const whatsappProtectedActions = [
-    ...document.querySelectorAll('main .button, main input, main summary'),
+    ...document.querySelectorAll('main a, main button, main input, main textarea, main summary'),
   ];
   const whatsappAssistProtectedContent = [
-    ...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main .button, main input, main textarea, main summary'),
+    ...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main a, main button, main input, main textarea, main summary'),
   ];
   let whatsappFrame;
 
