@@ -74,70 +74,141 @@ window.addEventListener('resize', () => {
 const whatsappFloat = document.querySelector('.whatsapp-float');
 const whatsappAssist = document.querySelector('[data-whatsapp-assist]');
 const whatsappAssistClose = document.querySelector('[data-whatsapp-assist-close]');
-let scheduleWhatsAppVisibility = () => {};
+const whatsappContact = document.querySelector('[data-whatsapp-contact]');
 
-if (whatsappFloat) {
-  const whatsappProtectedActions = [
-    ...document.querySelectorAll('main a, main button, main input, main textarea, main summary'),
-  ];
-  const whatsappAssistProtectedContent = [
-    ...document.querySelectorAll('main h1, main h2, main h3, main p, main li, main a, main button, main input, main textarea, main summary'),
-  ];
-  let whatsappFrame;
-
-  const overlapsProtectedContent = (bounds, protectedContent = whatsappProtectedActions) => protectedContent.some((element) => {
-    const actionBounds = element.getBoundingClientRect();
-    return actionBounds.width > 0
-      && actionBounds.height > 0
-      && actionBounds.right > bounds.left
-      && actionBounds.left < bounds.right
-      && actionBounds.bottom > bounds.top
-      && actionBounds.top < bounds.bottom;
-  });
-
-  const updateWhatsAppVisibility = () => {
-    whatsappFrame = undefined;
-    const floatBounds = whatsappFloat.getBoundingClientRect();
-    whatsappFloat.classList.toggle('is-contextually-hidden', overlapsProtectedContent(floatBounds));
-
-    if (whatsappAssist && !whatsappAssist.classList.contains('is-dismissed')) {
-      whatsappAssist.classList.toggle('is-contextually-hidden', overlapsProtectedContent(whatsappAssist.getBoundingClientRect(), whatsappAssistProtectedContent));
-    }
-  };
-
-  scheduleWhatsAppVisibility = () => {
-    if (whatsappFrame) return;
-    whatsappFrame = window.requestAnimationFrame?.(updateWhatsAppVisibility);
-    if (!whatsappFrame) updateWhatsAppVisibility();
-  };
-
-  window.addEventListener('scroll', scheduleWhatsAppVisibility, { passive: true });
-  window.addEventListener('resize', updateWhatsAppVisibility);
-  window.addEventListener('load', updateWhatsAppVisibility);
-  updateWhatsAppVisibility();
-}
-
-if (whatsappAssist) {
+if (whatsappAssist && whatsappFloat && whatsappContact) {
+  const pageId = whatsappContact.getAttribute('data-whatsapp-page');
+  // Explicit page IDs also work under the GitHub Pages repository path.
+  const dismissalKey = ['home', 'osteopatia', 'kinesiologia'].includes(pageId)
+    ? `gloria-whatsapp-dismissed-${pageId}` : null;
   const dismissWhatsAppAssist = () => {
     whatsappAssist.classList.add('is-dismissed');
     whatsappAssist.setAttribute('aria-hidden', 'true');
-  };
-  const dismissAssistAfterScroll = () => {
-    if (window.scrollY > 180) dismissWhatsAppAssist();
+    whatsappAssist.inert = true;
   };
 
-  whatsappAssistClose?.addEventListener('click', dismissWhatsAppAssist);
-  window.addEventListener('scroll', dismissAssistAfterScroll, { passive: true });
-  const introduction = document.querySelector('#inicio, main > article > section, main > section');
-  if (introduction && 'IntersectionObserver' in window) {
-    const introductionObserver = new IntersectionObserver((entries, observer) => {
-      if (entries.some((entry) => entry.isIntersecting)) return;
-      dismissWhatsAppAssist();
-      observer.disconnect();
-    }, { threshold: .08 });
-    introductionObserver.observe(introduction);
+  try {
+    if (dismissalKey && window.sessionStorage.getItem(dismissalKey) === 'true') dismissWhatsAppAssist();
+  } catch { /* Closing still works when browser storage is unavailable. */ }
+
+  whatsappAssistClose?.addEventListener('click', () => {
+    dismissWhatsAppAssist();
+    whatsappFloat?.focus({ preventScroll: true });
+    try {
+      if (dismissalKey) window.sessionStorage.setItem(dismissalKey, 'true');
+    } catch { /* No personal data is stored; storage is optional. */ }
+  });
+
+  const controls = [...document.querySelectorAll('a[href], button, input:not([type="hidden"]), textarea, select, summary, label, [tabindex]')]
+    .filter((element) => !whatsappContact.contains(element));
+  let circleLift = 0;
+  let assistLift = 0;
+  let placement = 'above';
+  let placementFrame = null;
+
+  const temporarilyUnavailable = (element, unavailable) => {
+    element.classList.toggle('is-obstructed', unavailable);
+    const hidden = unavailable || element.classList.contains('is-dismissed');
+    element.inert = hidden;
+    if (hidden) element.setAttribute('aria-hidden', 'true');
+    else element.removeAttribute('aria-hidden');
+  };
+
+  // Keep the current placement whenever it is safe; do not chase the default
+  // position on every scroll. Candidates are bounded to the same right corner.
+  const findSafeLift = (base, current, limit, obstacles, viewport) => {
+    const maximum = Math.min(limit, base.top - viewport.top);
+    const blockers = obstacles.filter((rect) => rect.right > base.left && rect.left < base.right);
+    const safe = (lift) => lift >= 0 && lift <= maximum
+      && base.left >= viewport.left && base.right <= viewport.right
+      && base.bottom - lift <= viewport.bottom
+      && !blockers.some((rect) => rect.bottom > base.top - lift && rect.top < base.bottom - lift);
+    if (safe(current)) return current;
+    const candidates = [0, Math.max(0, base.bottom - viewport.bottom), maximum];
+    blockers.forEach((rect) => candidates.push(base.bottom - rect.top, base.top - rect.bottom));
+    return candidates.filter(safe).sort((a, b) => Math.abs(a - current) - Math.abs(b - current) || a - b)[0];
+  };
+
+  const updateWhatsAppPlacement = () => {
+    placementFrame = null;
+    if (document.body.classList.contains('menu-is-open')) return;
+
+    // Read layout in one batch before updating this component only.
+    const anchor = whatsappContact.getBoundingClientRect();
+    const visual = window.visualViewport;
+    const viewport = {
+      left: (visual?.offsetLeft || 0) + 12,
+      right: (visual?.offsetLeft || 0) + (visual?.width || window.innerWidth) - 12,
+      top: Math.max((visual?.offsetTop || 0) + 12, header.getBoundingClientRect().bottom + 8),
+      bottom: (visual?.offsetTop || 0) + (visual?.height || window.innerHeight) - 16,
+    };
+    const obstacles = controls.flatMap((element) => {
+      const style = window.getComputedStyle(element);
+      if (style.visibility === 'hidden' || style.display === 'none' || element.closest('[inert]')) return [];
+      return [...element.getClientRects()].filter((rect) => rect.width && rect.height
+        && rect.bottom > viewport.top && rect.top < viewport.bottom)
+        .map((rect) => ({ left: rect.left - 8, right: rect.right + 8, top: rect.top - 8, bottom: rect.bottom + 8 }));
+    });
+    const nextCircleLift = findSafeLift(anchor, circleLift, 112, obstacles, viewport);
+    const circleAvailable = nextCircleLift !== undefined;
+    let nextAssist;
+    const assistWidth = whatsappAssist.offsetWidth;
+    const assistHeight = whatsappAssist.offsetHeight;
+    const gap = window.innerWidth <= 680 ? 8 : 10;
+
+    if (circleAvailable && !whatsappAssist.classList.contains('is-dismissed')) {
+      const circleTop = anchor.top - nextCircleLift;
+      const circleBottom = anchor.bottom - nextCircleLift;
+      for (const mode of [placement, placement === 'above' ? 'beside' : 'above']) {
+        const right = mode === 'above' ? anchor.right : anchor.left - gap;
+        const bottom = mode === 'above' ? circleTop - gap : circleBottom;
+        const base = { left: right - assistWidth, right, top: bottom - assistHeight, bottom };
+        const lift = findSafeLift(base, mode === placement ? assistLift : 0, 180, obstacles, viewport);
+        if (lift !== undefined) {
+          nextAssist = { mode, lift, right: anchor.right - right, bottom: anchor.bottom - bottom + lift };
+          break;
+        }
+      }
+    }
+
+    if (circleAvailable) {
+      circleLift = nextCircleLift;
+      whatsappFloat.style.setProperty('--whatsapp-circle-lift', `${circleLift}px`);
+    }
+    if (nextAssist) {
+      placement = nextAssist.mode;
+      assistLift = nextAssist.lift;
+      whatsappAssist.dataset.placement = placement;
+      whatsappAssist.style.setProperty('--whatsapp-assist-right', `${nextAssist.right}px`);
+      whatsappAssist.style.setProperty('--whatsapp-assist-bottom', `${nextAssist.bottom}px`);
+    }
+    const focusedInAssist = whatsappAssist.contains(document.activeElement);
+    const focusedOnCircle = document.activeElement === whatsappFloat;
+    // A lack of safe space is temporary, never a stored/manual dismissal.
+    temporarilyUnavailable(whatsappFloat, !circleAvailable);
+    temporarilyUnavailable(whatsappAssist, !nextAssist && !whatsappAssist.classList.contains('is-dismissed'));
+    if ((!nextAssist && focusedInAssist) || (!circleAvailable && focusedOnCircle)) {
+      const focusTarget = circleAvailable ? whatsappFloat
+        : (toggle.getClientRects().length ? toggle : document.querySelector('.brand'));
+      focusTarget?.focus({ preventScroll: true });
+    }
+  };
+
+  const scheduleWhatsAppPlacement = () => {
+    if (placementFrame === null) placementFrame = window.requestAnimationFrame(updateWhatsAppPlacement);
+  };
+  window.addEventListener('scroll', scheduleWhatsAppPlacement, { passive: true });
+  window.addEventListener('resize', scheduleWhatsAppPlacement);
+  window.addEventListener('pageshow', scheduleWhatsAppPlacement);
+  window.addEventListener('load', scheduleWhatsAppPlacement);
+  window.visualViewport?.addEventListener('resize', scheduleWhatsAppPlacement);
+  window.visualViewport?.addEventListener('scroll', scheduleWhatsAppPlacement, { passive: true });
+  ['click', 'focusin', 'input', 'change', 'toggle'].forEach((event) => document.addEventListener(event, scheduleWhatsAppPlacement, true));
+  if ('ResizeObserver' in window) {
+    const contentObserver = new ResizeObserver(scheduleWhatsAppPlacement);
+    contentObserver.observe(document.querySelector('main'));
   }
-  dismissAssistAfterScroll();
+  scheduleWhatsAppPlacement();
 }
 
 const trajectory = document.querySelector('.about-trajectory');
@@ -226,7 +297,6 @@ if (bookingForm) {
     });
     progress.hidden = !isMobile;
     progress.textContent = `Paso ${currentStep} de 2`;
-    scheduleWhatsAppVisibility();
     if (!focusTarget || !isMobile) return;
     window.requestAnimationFrame(() => {
       if (focusTarget === 'name') bookingName.focus();
