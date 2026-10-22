@@ -92,17 +92,14 @@ h1 em, h2 em { color: var(--green-700); font-style: normal; font-weight: 400; }
 .section-label p::before { content: ''; display: inline-block; width: 24px; height: 1px; margin: 0 10px 3px 0; background: currentColor; }
 .about-profile { grid-column: 1; display: grid; gap: 0; }
 .about-content { grid-column: 2; max-width: 600px; }
-.about-heading h2, .services-heading h2, .faq-intro h2, .appointment h2, .contact h2 { margin-bottom: 0; color: var(--blue-950); font-size: clamp(2.4rem, 4.2vw, 4rem); line-height: 1.05; }
+.services-heading h2, .faq-intro h2, .appointment h2, .contact h2 { margin-bottom: 0; color: var(--blue-950); font-size: clamp(2.4rem, 4.2vw, 4rem); line-height: 1.05; }
 .about-heading .section-label { margin-bottom: 16px; }
-.about-heading h2 { max-width: 580px; margin-top: 0; font-size: clamp(2.25rem, 3.1vw, 3rem); line-height: 1.1; }
+.about-heading h2 { max-width: 580px; margin: 0; color: var(--blue-950); font-size: clamp(2.25rem, 3.1vw, 3rem); line-height: 1.1; }
 .about-heading .about-name { margin: 16px 0 0; color: var(--blue-800); font-family: var(--sans); font-size: 1rem; font-weight: 600; line-height: 1.4; }
 .about-portrait { width: min(100%, 320px); margin: 0; }
 .about-portrait img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: center; border: 1px solid rgba(13,78,120,.14); }
 .about-details { margin-top: 28px; }
 .about-details .lead { max-width: 530px; margin-bottom: 25px; color: var(--blue-800); font-family: var(--display); font-size: clamp(1.3rem, 2vw, 1.6rem); line-height: 1.33; }
-.about-copy { max-width: 590px; }
-.about-copy p { color: #50626a; font-size: .94rem; line-height: 1.75; }
-.about-copy p + p { margin-top: 13px; }
 .credentials { display: grid; gap: 8px; max-width: 540px; margin: 30px 0 25px; padding: 0; list-style: none; }
 .credentials li { display: flex; min-height: 50px; align-items: center; padding: 12px 16px; border: 1px solid rgba(13,78,120,.16); color: var(--blue-800); background: rgba(255,255,255,.52); font-size: .84rem; font-weight: 750; line-height: 1.35; }
 .about-trajectory { display: grid; gap: 2px; width: min(100%, 320px); margin: 0; padding: 12px 15px 11px; border: 0; color: var(--white); background: var(--blue-800); box-shadow: inset 0 2px 0 var(--green-500); }
@@ -316,55 +313,76 @@ h1 em, h2 em { color: var(--green-700); font-style: normal; font-weight: 400; }
   .hero-visual { justify-self: center; width: min(100%, 650px); }
   .services-heading { grid-template-columns: 1fr 1fr; }
   .services-heading .section-label { grid-column: 1 / -1; }
-  .about-layout { column-gap: 42px; }
   .detail-layout, .legal-layout { gap: 60px; }
   .service-cross-nav-layout { gap: 60px; }
   .faq-layout, .contact-layout { gap: 60px; }
 }
 
+@media (min-width: 681px) and (max-width: 960px) {
+  .about-layout { grid-template-columns: minmax(220px, 260px) minmax(0, 1fr); column-gap: 32px; }
+  .about-heading h2 { font-size: 2rem; }
+  .about-details { margin-top: 20px; }
+}
+
 @media (max-width: 680px) {
-  :root { --page: calc(100% - 32px); --mobile-menu-offset: 62px; --header-height: 62px; }
-  html { scroll-padding-top: 72px; }
-  .header-content { height: 62px; }
-  .brand-mark { width: 44px; height: 44px; }
-  .brand-mark img { width: 100%; height: 100%; }
-  .brand-copy strong { font-size: .93rem; }
-  .brand-copy > span { font-size: .88rem; }
-  .hero-layout { gap: 29px; padding: 33px 0 38px; }
+  :root { --page: calc(100% - 32px); --mobile-menu-offset: 56px; --header-height: 56px; }
+  html { scroll-padding-top: 66px; }
+  .header-content { height: 56px; }
+  .site-header .brand { min-height: 44px; gap: 8px; }
+  .site-header .brand-mark { width: 40px; height: 40px; }
+  .site-header .brand-copy strong { font-size: .85rem; }
+  .site-header .brand-copy > span { font-size: .8rem; }
+  .site-header .brand-copy small { margin-top: 4px; font-size: .48rem; }
+  .hero-layout { gap: 24px; padding: 38px 0 40px; }
   .hero-copy { padding-right: 0; }
   h1 { margin-bottom: 15px; font-size: clamp(2.25rem, 10.5vw, 2.9rem); line-height: 1.04; }
-  .hero-intro { margin-bottom: 20px; font-size: .91rem; line-height: 1.65; }
-  .hero-actions { align-items: center; gap: 12px; flex-direction: row; flex-wrap: nowrap; }
+  .hero .eyebrow { gap: 8px; margin-bottom: 18px; font-size: .69rem; letter-spacing: .1em; }
+  .hero h1 { margin-bottom: 18px; font-size: clamp(2.25rem, 9.6vw, 2.7rem); line-height: 1.08; }
+  .hero-intro { max-width: 38ch; margin-bottom: 24px; font-size: .97rem; line-height: 1.6; }
+  .hero-actions { align-items: center; gap: 16px; flex-direction: row; flex-wrap: nowrap; }
   .hero-actions > a { flex: 0 0 auto; white-space: nowrap; }
-  .hero-actions .text-link { min-height: 49px; padding: 0 4px; }
+  .hero-actions .button { min-height: 46px; padding-inline: 16px; }
+  .hero-actions .text-link { min-height: 46px; padding: 0 4px; }
   .button { min-height: 49px; padding: 0 20px; }
   .image-shape { aspect-ratio: 1.35 / 1; border-radius: 18px 18px 3px 3px; }
   .image-shape img { object-position: 58% center; }
-  .hero-note { max-width: 310px; margin-top: 21px; }
+  .hero-note { display: none; }
   .section-space { padding: 72px 0; }
   .section-label { font-size: .63rem; }
-  .about-heading h2, .services-heading h2, .faq-intro h2, .appointment h2, .contact h2 { font-size: clamp(2rem, 9.5vw, 2.7rem); }
-  .about-layout { display: flex; flex-direction: column; gap: 0; }
-  .about-profile, .about-content { display: contents; }
-  .about-heading { order: 1; margin-bottom: 25px; }
-  .about-portrait { order: 2; align-self: center; width: min(100%, 300px); }
-  .about-trajectory { grid-template-columns: 1fr; align-items: start; gap: 5px; order: 3; align-self: center; width: min(100%, 300px); padding: 14px 16px 13px; }
-  .trajectory-value { grid-column: auto; white-space: nowrap; }
-  .trajectory-description { grid-column: auto; max-width: none; min-width: 0; font-size: .72rem; line-height: 1.3; white-space: nowrap; }
-  .about-details { order: 4; margin-top: 25px; }
-  .about-heading h2 { margin-top: 0; font-size: clamp(1.9rem, 7.9vw, 2.35rem); }
-  .about-details .lead { margin-bottom: 21px; font-size: 1.32rem; }
-  .about-copy p { font-size: .9rem; line-height: 1.7; }
-  .credentials { margin: 25px 0 21px; }
+  .faq-intro h2, .appointment h2, .contact h2 { font-size: clamp(2rem, 9.5vw, 2.7rem); }
+  .about, .services { padding-block: 52px; }
+  /* Editorial phone layout: one portrait/trajectory unit beside the introduction. */
+  .about-layout {
+    --about-portrait-width: clamp(112px, 32vw, 140px);
+    grid-template-columns: var(--about-portrait-width) minmax(0, 1fr);
+    grid-template-rows: auto auto min-content minmax(0, 1fr) auto auto;
+    grid-template-areas: "label label" "title title" "portrait name" "portrait intro" "credentials credentials" "cta cta";
+    gap: 0 16px;
+  }
+  .about-content, .about-heading, .about-details { display: contents; }
+  .about-profile { grid-area: portrait; grid-template-columns: minmax(0, 1fr); min-width: 0; }
+  .about-heading .section-label { grid-area: label; margin: 0 0 16px; }
+  .about-heading h2 { grid-area: title; margin-bottom: 16px; font-size: clamp(1.65rem, 6.8vw, 1.95rem); line-height: 1.14; }
+  .about-heading .about-name { grid-area: name; align-self: start; margin: 0 0 10px; font-size: 1rem; }
+  .about-portrait, .about-trajectory { width: 100%; }
+  .about-trajectory { gap: 3px; padding: 9px 8px 8px; }
+  .about .trajectory-value { font-size: 1.75rem; }
+  .about .trajectory-description { font-size: .65rem; overflow-wrap: anywhere; }
+  .about-details .lead { grid-area: intro; margin: 0; font-size: 1rem; line-height: 1.5; }
+  .about .credentials { grid-area: credentials; max-width: none; margin: 16px 0; }
   .credentials li { min-height: 48px; padding: 11px 14px; font-size: .82rem; }
+  .about-availability { grid-area: cta; margin: 0; }
   .services-heading, .faq-layout, .contact-layout { grid-template-columns: 1fr; gap: 27px; }
-  .services-heading > p { margin-top: -8px; }
-  .service-list { margin-top: 43px; }
-  .service-item { grid-template-columns: 1fr; gap: 18px; min-height: 0; padding: 25px 0; }
-  .service-item h3 { font-size: 1.65rem; }
-  .service-item p { font-size: .83rem; line-height: 1.6; }
-  .service-actions { width: 100%; align-items: stretch; justify-content: flex-start; gap: 15px; flex-direction: column; }
-  .service-actions { gap: 13px; }
+  .services-heading { gap: 18px; }
+  .services-heading h2 { font-size: clamp(1.8rem, 7.5vw, 2.15rem); line-height: 1.1; }
+  .services-heading > p { max-width: none; margin: 0; font-size: .875rem; line-height: 1.55; }
+  .service-list { margin-top: 28px; }
+  .service-item { grid-template-columns: 1fr; gap: 12px; min-height: 0; padding: 20px 0; }
+  .service-item h3 { font-size: 1.5rem; }
+  .service-item p { font-size: .875rem; line-height: 1.55; }
+  .service-actions { width: 100%; align-items: stretch; justify-content: flex-start; gap: 4px; flex-direction: column; }
+  .service-link { display: inline-flex; align-items: center; align-self: flex-start; min-height: 44px; }
+  .services .button-service { min-height: 44px; padding-inline: 14px; }
   .appointment-layout { grid-template-columns: 1fr; gap: 29px; max-width: none; }
   .booking-form { max-width: none; padding: 22px 0 0; border-top: 1px solid rgba(13,78,120,.24); border-left: 0; }
   .booking-form[data-booking-enhanced="true"] { gap: 15px; }
@@ -376,13 +394,26 @@ h1 em, h2 em { color: var(--green-700); font-style: normal; font-weight: 400; }
   .booking-options label:last-child { grid-column: auto; }
   .booking-form .button-green { width: 100%; }
   .detail-hero-layout, .detail-layout, .detail-faq-layout, .detail-cta-layout, .service-cross-nav-layout, .legal-layout { grid-template-columns: 1fr; gap: 28px; }
-  .service-page-main .detail-content { padding-block: 62px; }
-  .service-cross-nav { padding: 56px 0; }
+  .service-page-main .detail-hero { padding-block: 36px 44px; }
+  .service-page-main .detail-content, .service-page-main .detail-faq { padding-block: 48px; }
+  .service-page-main .detail-cta { padding-block: 44px; }
+  .service-page-main .detail-layout, .service-page-main .detail-faq-layout, .service-page-main .detail-cta-layout, .service-page-main .service-cross-nav-layout { gap: 20px; }
+  .service-page-main .service-cross-nav { padding-block: 40px; }
   .legal-layout h1 { font-size: clamp(2.35rem, 10vw, 3.3rem); }
-  .detail-hero h1 { font-size: clamp(2.35rem, 10vw, 3.3rem); }
-  .back-link { margin-bottom: 24px; }
-  .detail-tagline { font-size: 1.45rem; }
-  .detail-heading h2, .detail-cta h2 { font-size: clamp(2rem, 9.5vw, 2.7rem); }
+  .service-page-main .detail-hero h1 { font-size: clamp(2rem, 8.7vw, 2.55rem); line-height: 1.08; }
+  .service-page-main .back-link { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 18px; }
+  .service-page-main .eyebrow { gap: 8px; margin-bottom: 12px; font-size: .65rem; }
+  .service-page-main .detail-tagline { font-size: 1.25rem; line-height: 1.3; }
+  .service-page-main .detail-intro { margin-bottom: 20px; font-size: .9rem; line-height: 1.6; }
+  .service-page-main .detail-heading h2, .service-page-main .detail-cta h2, .service-page-main .service-cross-nav h2 { margin-top: 14px; font-size: clamp(1.7rem, 7vw, 2.05rem); line-height: 1.14; }
+  .service-page-main .detail-copy p, .service-page-main .detail-situations { font-size: .9rem; line-height: 1.65; }
+  .service-page-main .detail-copy p + p { margin-top: 14px; }
+  .service-page-main .detail-situations { gap: 8px; margin-top: 16px; }
+  .service-page-main .detail-faq-list summary { padding-block: 16px; }
+  .service-page-main .detail-cta p { margin-top: 16px; font-size: .9rem; line-height: 1.6; }
+  .service-page-main .service-cross-nav-layout > div:last-child > p { font-size: .9rem; line-height: 1.6; }
+  .service-page-main .service-cross-nav .text-link { min-height: 44px; }
+  .service-page-main .button { min-height: 46px; }
   .detail-cta .button-green { width: 100%; }
   .faq-intro h2 { margin-top: 24px; }
   .faq-list { margin-top: 8px; }
@@ -405,7 +436,6 @@ h1 em, h2 em { color: var(--green-700); font-style: normal; font-weight: 400; }
 }
 
 @media (max-width: 360px) {
-  .hero .eyebrow { flex-direction: column; align-items: flex-start; gap: 8px; }
   .hero-intro { text-wrap: balance; }
 }
 
