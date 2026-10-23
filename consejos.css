@@ -1,0 +1,175 @@
+/* Consejos: catalogue, readings and small entry points. Uses the site's tokens. */
+.advice-page { color: var(--blue-950); }
+.advice-page [hidden] { display: none !important; }
+.advice-intro { position: relative; isolation: isolate; overflow: hidden; padding: 62px 0 50px; }
+.advice-intro-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 60px); }
+.advice-editorial { display: flex; align-items: center; justify-self: end; gap: 22px; max-width: 365px; margin: 0; }
+.advice-editorial img { flex: 0 0 112px; width: 112px; height: 132px; object-fit: contain; }
+.advice-editorial figcaption { margin: 0; color: var(--blue-950); font: 400 1.3rem/1.4 var(--display); text-wrap: balance; }
+.advice-waves { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; mask-image: linear-gradient(to bottom, #000 60%, transparent); pointer-events: none; }
+.advice-intro .eyebrow { margin-bottom: 18px; font-size: .69rem; }
+.advice-intro h1 { max-width: 760px; margin: 0 0 20px; font-size: clamp(3.2rem, 5.2vw, 4.6rem); line-height: 1.01; }
+.advice-intro h1 em { display: block; }
+.advice-deck { max-width: 570px; margin: 0; color: var(--ink); font-size: 1rem; line-height: 1.7; }
+.advice-readings { padding-bottom: 66px; }
+.advice-catalog { position: relative; min-width: 0; margin: 0; padding: 0; border: 0; }
+.advice-filter-input { position: absolute; width: 1px; height: 1px; padding: 0; clip-path: inset(50%); overflow: hidden; white-space: nowrap; }
+.advice-filter { display: inline-flex; min-height: 44px; align-items: center; justify-content: center; margin: 0 5px 26px 0; padding: 0 20px; border: 1px solid rgba(13,78,120,.28); border-radius: 28px; color: var(--blue-800); font-size: .84rem; font-weight: 600; cursor: pointer; transition: background .14s ease, border-color .14s ease, color .14s ease; }
+.advice-filter:hover { border-color: var(--blue-800); background: var(--blue-100); }
+.advice-filter-input:checked + .advice-filter { border-color: var(--blue-800); color: var(--white); background: var(--blue-800); }
+.advice-filter-input:focus-visible + .advice-filter { outline: 3px solid var(--blue-950); outline-offset: 3px; }
+.advice-results { position: absolute; top: 13px; right: 0; margin: 0; color: var(--muted); font-size: .78rem; }
+.advice-results span { display: none; }
+#advice-all:checked ~ .advice-results .count-all,
+#advice-osteopatia:checked ~ .advice-results .count-osteopatia,
+#advice-kinesiologia:checked ~ .advice-results .count-kinesiologia { display: inline; }
+#advice-osteopatia:checked ~ .advice-grid .advice-card:not([data-specialty="osteopatia"]),
+#advice-kinesiologia:checked ~ .advice-grid .advice-card:not([data-specialty="kinesiologia"]) { display: none; }
+.advice-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px; }
+.advice-card { display: flex; min-width: 0; flex-direction: column; }
+.advice-photo { display: block; width: 100%; height: 202px; margin-bottom: 18px; padding-block: var(--advice-figure-padding, 8px); object-fit: contain; object-position: center; }
+.advice-photo[data-illustration="1"] { --advice-figure-padding: 14px; }
+.advice-photo[data-illustration="3"] { --advice-figure-padding: 19px; }
+.advice-category { display: inline-block; width: max-content; max-width: 100%; margin-bottom: 10px; padding: 4px 8px; border-radius: 4px; color: var(--blue-800); background: var(--blue-100); font-size: .65rem; font-weight: 750; letter-spacing: .05em; line-height: 1.3; text-transform: uppercase; }
+.advice-category-kinesiologia { color: var(--green-action); background: #e4efda; }
+.advice-card h2 { margin: 0 0 14px; color: var(--blue-950); font-size: 1.65rem; line-height: 1.13; letter-spacing: -.035em; }
+.advice-card h2 a:hover { color: var(--blue-800); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.advice-excerpt { margin: 0 0 18px; color: var(--ink); font-size: .91rem; line-height: 1.65; }
+.advice-link { display: inline-flex; width: max-content; max-width: 100%; min-height: 44px; align-items: center; margin-top: auto; color: var(--blue-800); font-size: .83rem; font-weight: 750; text-decoration: underline; text-underline-offset: 5px; text-decoration-color: rgba(13,78,120,.35); transition: text-decoration-color .14s ease, color .14s ease; }
+.advice-link:hover { color: var(--blue-950); text-decoration-color: currentColor; }
+.advice-situations { padding: 57px 0 60px; border-top: 1px solid var(--line); background: #f0f5ed; }
+.advice-situations h2 { margin: 0 0 14px; color: var(--blue-950); font-size: clamp(2.1rem, 3.5vw, 2.85rem); line-height: 1.08; }
+.advice-situation-intro { margin: 0; color: var(--ink); font-size: .96rem; line-height: 1.6; }
+/* Native details remain usable when JavaScript is disabled. */
+.advice-questions { margin: 28px 0 0; }
+.advice-question { border-bottom: 1px solid var(--line); }
+.advice-question summary, .advice-choice { min-height: 64px; padding: 18px 8px; color: var(--blue-950); font: 400 1.3rem/1.25 var(--display); letter-spacing: -.02em; text-wrap: balance; cursor: pointer; }
+.advice-question summary::marker { color: var(--green-700); }
+.advice-choice-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 26px; margin: 28px 0 24px; }
+.advice-choice-item { display: contents; }
+.advice-choice { grid-row: 1; display: flex; align-items: start; justify-content: space-between; gap: 12px; min-width: 0; min-height: 108px; border: 0; border-top: 2px solid var(--line); border-radius: 0; text-align: left; background: transparent; transition: border-color .14s ease, background .14s ease; }
+.advice-choice::after { content: '+'; flex: 0 0 16px; color: var(--green-action); font: 400 1.15rem/1.4 var(--sans); text-align: center; }
+.advice-choice:hover { border-color: var(--green-700); background: rgba(255,255,255,.4); }
+.advice-choice[aria-expanded="true"] { border-color: var(--green-action); background: rgba(255,255,255,.65); }
+.advice-choice[aria-expanded="true"]::after { content: '−'; }
+.advice-page .advice-choice:focus-visible { outline: 3px solid var(--blue-950); outline-offset: 3px; }
+.advice-answer { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 32px; padding: 25px 0 23px; }
+.advice-choice-item .advice-answer { grid-column: 1 / -1; grid-row: 2; border-block: 1px solid rgba(76,142,40,.3); }
+.advice-answer h3 { margin: 0 0 10px; color: var(--blue-950); font: 400 1.7rem/1.15 var(--display); letter-spacing: -.02em; }
+.advice-answer p { max-width: 70ch; margin: 0; color: var(--ink); font-size: .96rem; line-height: 1.7; }
+.advice-answer-links { display: grid; justify-items: start; gap: 4px; }
+.advice-note { margin: 17px 0 0; color: var(--muted); font-size: .77rem; line-height: 1.5; }
+.advice-contact { padding: 38px 0; color: var(--white); background: var(--blue-800); }
+.advice-contact-layout { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.advice-contact h2 { margin: 0 0 9px; color: var(--white); font-size: 2.15rem; line-height: 1.14; }
+.advice-contact p { margin: 0; color: #d8e4e8; font-size: .91rem; line-height: 1.5; }
+.advice-contact .button { flex-shrink: 0; }
+
+/* Small additions to existing pages. */
+.advice-invitation { padding: 32px 0; border-top: 1px solid var(--line); background: var(--warm); }
+.advice-invitation-layout { display: flex; align-items: center; justify-content: flex-start; gap: clamp(24px, 4vw, 48px); }
+.advice-invitation-layout > .advice-link { flex-shrink: 0; margin-top: 0; }
+.advice-invitation h2 { margin: 0 0 9px; color: var(--blue-950); font-size: 1.8rem; line-height: 1.15; }
+.advice-invitation p { max-width: 640px; margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.6; }
+.advice-related { padding: 36px 0; border-top: 1px solid var(--line); }
+.advice-related h2 { margin: 0 0 20px; color: var(--blue-950); font-size: 1.85rem; line-height: 1.15; }
+.advice-related-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 36px; margin: 0; padding: 0; list-style: none; }
+.advice-related-list a { display: flex; min-height: 48px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--line); color: var(--blue-800); font-size: .95rem; font-weight: 600; line-height: 1.5; text-decoration: underline; text-decoration-color: rgba(13,78,120,.3); text-underline-offset: 4px; }
+.advice-related-list a:hover { text-decoration-color: currentColor; }
+
+/* Individual readings. */
+.advice-article { padding: 36px 0 48px; }
+.advice-article-shell { max-width: 1000px; }
+.advice-back { margin-bottom: 22px; }
+.advice-article-header { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(260px, 1fr); align-items: start; gap: 32px; }
+.advice-article h1 { max-width: none; margin: 5px 0 18px; font-size: clamp(2.2rem, 3.8vw, 3.35rem); line-height: 1.08; }
+.advice-article-lead { margin: 0; color: var(--ink); font-family: var(--display); font-size: 1.2rem; line-height: 1.55; }
+.advice-article-figure { min-width: 0; margin: 0; }
+.advice-article-figure img { display: block; width: 100%; height: 260px; padding: 10px; object-fit: contain; }
+.advice-article-figure figcaption { margin-top: 9px; color: var(--muted); font-size: .72rem; line-height: 1.5; }
+.advice-article-figure a { text-decoration: underline; text-underline-offset: 3px; }
+.advice-article-copy { max-width: 65ch; margin: 24px 0; color: var(--ink); font-size: 1rem; line-height: 1.75; }
+.advice-article-copy p { margin: 0 0 20px; }
+.advice-article-more { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); }
+.advice-article-more h2 { margin: 0 0 14px; color: var(--blue-950); font-size: 1.7rem; line-height: 1.2; }
+
+@media (min-width: 681px) and (max-width: 1100px) {
+  .advice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
+  .advice-photo { height: 220px; }
+  .advice-choice-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .advice-choice-item:nth-child(n+3) .advice-choice { grid-row: 2; }
+  .advice-choice-item .advice-answer { grid-row: 3; }
+  .advice-answer { grid-template-columns: 1fr; gap: 12px; }
+  .advice-answer-links { display: flex; flex-wrap: wrap; gap: 24px; }
+  .advice-article-header { grid-template-columns: minmax(0, 1.4fr) minmax(210px, 1fr); gap: 28px; }
+}
+@media (max-width: 960px) {
+  .advice-intro-layout { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .advice-editorial { justify-self: start; max-width: 420px; gap: 16px; }
+  .advice-editorial img { flex-basis: 84px; width: 84px; height: 100px; }
+  .advice-editorial figcaption { font-size: 1.16rem; }
+}
+@media (max-width: 680px) {
+  .advice-intro { padding: 36px 0 30px; }
+  .advice-intro .eyebrow { gap: 8px; margin-bottom: 16px; font-size: .61rem; letter-spacing: .11em; }
+  .advice-intro .eyebrow > span { width: 18px; }
+  .advice-intro h1 { margin-bottom: 16px; font-size: clamp(2.55rem, 11vw, 3.1rem); line-height: 1.03; }
+  .advice-deck { max-width: none; font-size: .94rem; line-height: 1.65; }
+  .advice-intro-layout { gap: 18px; }
+  .advice-editorial { max-width: 330px; gap: 18px; }
+  .advice-editorial img { flex-basis: 72px; width: 72px; height: 84px; }
+  .advice-editorial figcaption { font-size: 1.1rem; line-height: 1.35; }
+  .advice-filter { margin-right: 3px; padding: 0 13px; font-size: .8rem; }
+  .advice-results { position: static; margin: -9px 0 20px; font-size: .74rem; }
+  .advice-grid { grid-template-columns: 1fr; gap: 26px; }
+  .advice-card { display: grid; grid-template-columns: 104px minmax(0, 1fr); column-gap: 18px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
+  .advice-photo { grid-column: 1; grid-row: 1; width: 104px; height: 124px; margin: 0; --advice-figure-padding: 6px; }
+  .advice-photo[data-illustration="1"] { --advice-figure-padding: 9px; }
+  .advice-photo[data-illustration="3"] { --advice-figure-padding: 13px; }
+  .advice-card-heading { grid-column: 2; grid-row: 1; min-width: 0; align-self: start; }
+  .advice-category { margin: 1px 0 9px; padding: 4px 6px; font-size: .6rem; }
+  .advice-card h2 { margin: 0; font-size: 1.4rem; line-height: 1.15; }
+  .advice-excerpt { grid-column: 1 / -1; margin: 13px 0 0; font-size: .88rem; line-height: 1.6; }
+  .advice-card > .advice-link { grid-column: 1 / -1; margin: 4px 0 -5px; }
+  .advice-readings { padding-bottom: 35px; }
+  .advice-situations { padding: 34px 0 38px; }
+  .advice-situations h2 { margin-bottom: 12px; font-size: 2.05rem; line-height: 1.1; }
+  .advice-situation-intro { font-size: .91rem; }
+  .advice-choice-list { grid-template-columns: 1fr; gap: 0; margin: 23px 0; }
+  .advice-choice { grid-row: auto; min-height: 66px; padding: 17px 4px; font-size: 1.25rem; }
+  .advice-question summary { padding-inline: 5px; font-size: 1.25rem; }
+  .advice-choice-item .advice-answer { grid-row: auto; border-top: 0; padding: 4px 4px 22px; }
+  .advice-answer { grid-template-columns: 1fr; gap: 12px; padding: 21px 0 14px; }
+  .advice-answer h3 { font-size: 1.5rem; line-height: 1.16; }
+  .advice-answer p { font-size: .91rem; line-height: 1.65; }
+  .advice-answer-links { gap: 0; }
+  .advice-note { margin-top: 15px; }
+  .advice-contact { padding: 30px 0 32px; }
+  .advice-contact-layout { display: grid; gap: 19px; }
+  .advice-contact h2 { font-size: 1.8rem; }
+  .advice-contact .button { width: max-content; }
+  .advice-invitation { padding-block: 28px; }
+  .advice-invitation-layout { display: grid; gap: 10px; }
+  .advice-invitation h2, .advice-related h2 { font-size: 1.65rem; }
+  .advice-invitation p { font-size: .9rem; }
+  .advice-related { padding-block: 28px; }
+  .advice-related-list { grid-template-columns: 1fr; gap: 5px; }
+  .advice-related-list a { font-size: .91rem; }
+  .advice-article { padding: 24px 0 38px; }
+  .advice-back { margin-bottom: 18px; }
+  .advice-article-header { grid-template-columns: 1fr; gap: 20px; }
+  .advice-article h1 { margin: 5px 0 20px; font-size: clamp(2.1rem, 8.8vw, 2.65rem); line-height: 1.08; }
+  .advice-article-lead { font-size: 1.1rem; line-height: 1.6; }
+  .advice-article-figure { max-width: 480px; }
+  .advice-article-copy { margin-top: 25px; font-size: .97rem; line-height: 1.75; }
+}
+@media (max-width: 360px) {
+  .advice-card { grid-template-columns: 88px minmax(0, 1fr); column-gap: 14px; }
+  .advice-photo { width: 88px; height: 120px; }
+  .advice-card h2 { font-size: 1.32rem; }
+  .advice-filter { padding-inline: 11px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .advice-choice-item .advice-answer:not([hidden]) { animation: advice-answer-in .14s ease-out; }
+  @keyframes advice-answer-in { from { opacity: 0; } to { opacity: 1; } }
+}
